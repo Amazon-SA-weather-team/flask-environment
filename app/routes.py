@@ -13,20 +13,9 @@ import requests
 @login_required
 def index():
 
-    print(current_user.city)
-    
-    # url = "https://community-open-weather-map.p.rapidapi.com/weather"
-
-    # querystring = {"id":"2172797","units":"%22metric%22 or %22imperial%22","mode":"xml%2C html","q":current_user.city}
-
-    # headers = {
-    #     'x-rapidapi-host': "community-open-weather-map.p.rapidapi.com",
-    #     'x-rapidapi-key': "e0cd5870dcmshdd4c9a6671e756fp12c7f7jsnaa9b5447322b"
-    #     }
-
-    # response = requests.request("GET", url, headers=headers, params=querystring)
-
-    # data = response.json()
+    # Call API get weather Info
+    # data = currentWeather(current_user.city)
+    # fiveDay(current_user.city)
 
     data = {'coord': {'lon': -77.39, 'lat': 38.97}, 
     'weather': [{'id': 803, 'main': 'Clouds', 'description': 'broken clouds', 'icon': '04d'}], 
@@ -89,5 +78,47 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
-def convertTemp(temp):
-    return temp* 9/5 -459.67
+def currentWeather(city):
+
+    url = "https://community-open-weather-map.p.rapidapi.com/weather"
+
+    querystring = {"id":"2172797","units":"%22metric%22 or %22imperial%22","mode":"xml%2C html","q":city}
+
+    headers = {
+        'x-rapidapi-host': "community-open-weather-map.p.rapidapi.com",
+        'x-rapidapi-key': "e0cd5870dcmshdd4c9a6671e756fp12c7f7jsnaa9b5447322b"
+        }
+
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    data = response.json()
+
+    # Convert temp unit
+    data['main']['temp'] = round(data['main']['temp'] * 9/5 -459.67, 1)
+    data['main']['feels_like'] = round(data['main']['feels_like'] * 9/5 -459.67, 1)
+    data['main']['temp_min'] = round(data['main']['temp_min'] * 9/5 -459.67, 1)
+    data['main']['temp_max'] = round(data['main']['temp_max'] * 9/5 -459.67, 1)
+
+    return data
+
+def fiveDay(city):
+    url = "https://community-open-weather-map.p.rapidapi.com/forecast"
+
+    querystring = {"q":city}
+
+    headers = {
+        'x-rapidapi-host': "community-open-weather-map.p.rapidapi.com",
+        'x-rapidapi-key': "e0cd5870dcmshdd4c9a6671e756fp12c7f7jsnaa9b5447322b"
+        }
+
+    response = requests.request("GET", url, headers=headers, params=querystring)
+
+    data = response.json()
+
+    # Convert temp unit
+    for list in data['list']:
+        list['main']['temp'] = round(list['main']['temp'] * 9 / 5 - 459.67, 1)
+        list['main']['feels_like'] = round(list['main']['feels_like'] * 9 / 5 - 459.67, 1)
+        list['main']['temp_min'] = round(list['main']['temp_min'] * 9 / 5 - 459.67, 1)
+        list['main']['temp_max'] = round(list['main']['temp_max'] * 9 / 5 - 459.67, 1)
+
+    return data
