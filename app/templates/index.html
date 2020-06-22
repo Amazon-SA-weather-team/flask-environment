@@ -2,24 +2,14 @@
 
 {% block content %}
     <h1>Hi, {{ current_user.username }}!</h1>
-    <p>Current weather: {{ data.weather[0].main }}</p>
-    <p>Temp: {{ data.main.temp }}</p>
-    <p>feels_like: {{ data.main.feels_like }}</p>
-    <p>Lowest Temp: {{ data.main.temp_min }}</p>
-    <p>Highest Temp: {{ data.main.temp_max }}</p>
-    <p>City: {{ data.name }}</p>
+    <p>Current weather: {{ currentData.weather[0].main }}</p>
+    <p>Temp: {{ currentData.main.temp }}</p>
+    <p>feels_like: {{ currentData.main.feels_like }}</p>
+    <p>Lowest Temp: {{ currentData.main.temp_min }}</p>
+    <p>Highest Temp: {{ currentData.main.temp_max }}</p>
+    
+    <p>Sunrise: {{ currentData.sys.sunrise }}</p>
+    <p>Sunset: {{ currentData.sys.sunset }}</p>
+    <p>City: {{ currentData.name }}</p>
 {% endblock %}
 
-<!-- {'coord': {'lon': -77.39, 'lat': 38.97}, 
-'weather': [{'id': 803, 'main': 'Clouds', 'description': 'broken clouds', 'icon': '04d'}], 
-'base': 'stations', 
-'main': {'temp': 299.71, 'feels_like': 299.7, 'temp_min': 298.71, 'temp_max': 300.93, 'pressure': 1019, 'humidity': 57}, 
-'visibility': 16093, 
-'wind': {'speed': 3.6, 'deg': 160}, 
-'clouds': {'all': 75}, 
-'dt': 1592505232, 
-'sys': {'type': 1, 'id': 4481, 'country': 'US', 'sunrise': 1592473427, 'sunset': 1592527071}, 
-'timezone': -14400, 
-'id': 4763793, 
-'name': 'Herndon', 
-'cod': 200} -->

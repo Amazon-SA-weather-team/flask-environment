@@ -5,40 +5,55 @@ from app.forms import LoginForm, RegistrationForm, UpdateProfileForm
 from app.models import User
 from app import db
 from werkzeug.urls import url_parse
+from datetime import datetime
 import requests
 
+
+record = {'has':False, 'current':{}, 'fiveDay': {}}
 @app.route('/')
 @app.route('/index')
 @login_required
 def index():
 
+    # Check if record exist
+    if record['has'] is False:
+        # Call API get weather Info
+        # record['current'] = currentWeather(current_user.city)
+        # record['fiveDay'] = fiveDay(current_user.city)
 
-    # Call API get weather Info
-    #currentWeather(current_user.city)
-    #fiveDay(current_user.city)
+        # Hard code data for code and test use
+        data = {'coord': {'lon': -77.39, 'lat': 38.97}, 
+        'weather': [{'id': 803, 'main': 'Clouds', 'description': 'broken clouds', 'icon': '04d'}], 
+        'base': 'stations', 
+        'main': {'temp': 299.71, 'feels_like': 299.7, 'temp_min': 298.71, 'temp_max': 300.93, 'pressure': 1019, 'humidity': 57}, 
+        'visibility': 16093, 
+        'wind': {'speed': 3.6, 'deg': 160}, 
+        'clouds': {'all': 75}, 
+        'dt': 1592505232, 
+        'sys': {'type': 1, 'id': 4481, 'country': 'US', 'sunrise': 1592473427, 'sunset': 1592527071}, 
+        'timezone': -14400, 
+        'id': 4763793, 
+        'name': 'Herndon', 
+        'cod': 200}
+        data['main']['temp'] = round(data['main']['temp'] * 9/5 -459.67, 1)
+        data['main']['feels_like'] = round(data['main']['feels_like'] * 9/5 -459.67, 1)
+        data['main']['temp_min'] = round(data['main']['temp_min'] * 9/5 -459.67, 1)
+        data['main']['temp_max'] = round(data['main']['temp_max'] * 9/5 -459.67, 1)
+        data['sys']['sunrise'] = datetime.fromtimestamp(data['sys']['sunrise']).strftime("%H:%M")
+        data['sys']['sunset'] = datetime.fromtimestamp(data['sys']['sunset']).strftime("%H:%M")
 
-    # Hard code data for code and test use
-    data = {'coord': {'lon': -77.39, 'lat': 38.97}, 
-    'weather': [{'id': 803, 'main': 'Clouds', 'description': 'broken clouds', 'icon': '04d'}], 
-    'base': 'stations', 
-    'main': {'temp': 299.71, 'feels_like': 299.7, 'temp_min': 298.71, 'temp_max': 300.93, 'pressure': 1019, 'humidity': 57}, 
-    'visibility': 16093, 
-    'wind': {'speed': 3.6, 'deg': 160}, 
-    'clouds': {'all': 75}, 
-    'dt': 1592505232, 
-    'sys': {'type': 1, 'id': 4481, 'country': 'US', 'sunrise': 1592473427, 'sunset': 1592527071}, 
-    'timezone': -14400, 
-    'id': 4763793, 
-    'name': 'Herndon', 
-    'cod': 200}
+        record['current'] = data        
 
+        # Set has record to true
+        record['has'] = True
+    else:
+        if record['current']['name'] == current_user.city:
+            print('I already exist')
+        else:
+            record['current'] = currentWeather(current_user.city)
+            print('city changed')
 
-    data['main']['temp'] = round(data['main']['temp'] * 9/5 -459.67, 1)
-    data['main']['feels_like'] = round(data['main']['feels_like'] * 9/5 -459.67, 1)
-    data['main']['temp_min'] = round(data['main']['temp_min'] * 9/5 -459.67, 1)
-    data['main']['temp_max'] = round(data['main']['temp_max'] * 9/5 -459.67, 1)
-
-    return render_template("index.html", title='Home Page', data = data)
+    return render_template("index.html", title='Home Page', currentData = record['current'], fiveData = record['fiveDay'])
 
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
@@ -76,6 +91,10 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
+    # Delete user record when user log out
+    record['has'] = False
+    record['current'] = {}
+    record['fiveDay'] = {}
     return redirect(url_for('index'))
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -115,6 +134,9 @@ def currentWeather(city):
     data['main']['feels_like'] = round(data['main']['feels_like'] * 9/5 -459.67, 1)
     data['main']['temp_min'] = round(data['main']['temp_min'] * 9/5 -459.67, 1)
     data['main']['temp_max'] = round(data['main']['temp_max'] * 9/5 -459.67, 1)
+    data['sys']['sunrise'] = datetime.fromtimestamp(data['sys']['sunrise']).strftime("%H:%M")
+    data['sys']['sunset'] = datetime.fromtimestamp(data['sys']['sunset']).strftime("%H:%M")
+    print('current weather run')
 
     return data
 
@@ -140,4 +162,8 @@ def fiveDay(city):
         list['main']['temp_min'] = round(list['main']['temp_min'] * 9 / 5 - 459.67, 1)
         list['main']['temp_max'] = round(list['main']['temp_max'] * 9 / 5 - 459.67, 1)
 
+    data['city']['sunrise'] = datetime.fromtimestamp(data['city']['sunrise']).strftime("%H:%M")
+    data['city']['sunset'] = datetime.fromtimestamp(data['city']['sunset']).strftime("%H:%M")
+
+    print('five days run')
     return data
