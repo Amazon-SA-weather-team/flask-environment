@@ -1,22 +1,23 @@
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, login_required, logout_user
 from app import app
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, UpdateProfileForm
 from app.models import User
 from app import db
 from werkzeug.urls import url_parse
 import requests
-
 
 @app.route('/')
 @app.route('/index')
 @login_required
 def index():
 
-    # Call API get weather Info
-    # data = currentWeather(current_user.city)
-    # fiveDay(current_user.city)
 
+    # Call API get weather Info
+    #currentWeather(current_user.city)
+    #fiveDay(current_user.city)
+
+    # Hard code data for code and test use
     data = {'coord': {'lon': -77.39, 'lat': 38.97}, 
     'weather': [{'id': 803, 'main': 'Clouds', 'description': 'broken clouds', 'icon': '04d'}], 
     'base': 'stations', 
@@ -39,9 +40,24 @@ def index():
 
     return render_template("index.html", title='Home Page', data = data)
 
+@app.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    form = UpdateProfileForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=current_user.username).first()
+        user.address = form.address.data
+        user.city = form.city.data
+        print(user.city)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you update your profile!')
+        return redirect(url_for('index'))
+    return render_template('profile.html', title='Profile', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # Check if user is already have authenticated
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
@@ -68,6 +84,7 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
+        # Save User into the database
         user = User(username=form.username.data, email=form.email.data, address=form.address.data, city=form.city.data)
         print(user)
         user.set_password(form.password.data)
@@ -78,6 +95,7 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
+# Get current weather data
 def currentWeather(city):
 
     url = "https://community-open-weather-map.p.rapidapi.com/weather"
@@ -100,6 +118,7 @@ def currentWeather(city):
 
     return data
 
+# Get five days forecase weather data
 def fiveDay(city):
     url = "https://community-open-weather-map.p.rapidapi.com/forecast"
 

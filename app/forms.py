@@ -29,4 +29,7 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('Please use a different email address.')
 
-    
+class UpdateProfileForm(FlaskForm):
+    address = StringField('Address', validators=[DataRequired()])
+    city = StringField('City', validators=[DataRequired()])
+    submit = SubmitField('Update')

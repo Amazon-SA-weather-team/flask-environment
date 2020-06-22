@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Profile</h1>
+    <h1>Hi, {{ current_user.username }}!</h1>
+    <h2>Address: {{ current_user.address }}, {{ current_user.city }}</h2>
+    <button id="UpdateButton" onClick="UpdateClick()">Update Address</button>
+    <form action="" method="post" id = "UpdateForm" style="display: none">
+        {{ form.hidden_tag() }}
+
+        <p>
+            {{ form.address.label }}<br>
+            {{ form.address(size=64) }}<br>
+            {% for error in form.address.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.city.label }}<br>
+            {{ form.city(size=15) }}<br>
+            {% for error in form.city.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    <script>
+        function UpdateClick() {
+            document.getElementById("UpdateForm").style.display = "block";
+            document.getElementById("UpdateButton").style.display = "none";
+
+        }
+    </script>
+{% endblock %}

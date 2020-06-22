@@ -2,15 +2,16 @@
     <head>
         <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mainpage.css') }}">
         {% if title %}
-        <title>{{ title }} - microblog</title>
+        <title>{{ title }} - SA Weather</title>
         {% else %}
-        <title>microblog</title>
+        <title>weather</title>
         {% endif %}
     </head>
     <body>
       <div>
-        Microblog:
+        Weather:
         <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('profile') }}">Profile</a>
         {% if current_user.is_anonymous %}
         <a href="{{ url_for('login') }}">Login</a>
         {% else %}
