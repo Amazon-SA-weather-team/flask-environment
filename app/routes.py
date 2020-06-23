@@ -144,7 +144,7 @@ def currentWeather(city):
     data['main']['feels_like'] = round(data['main']['feels_like'] * 9/5 -459.67, 1)
     data['main']['temp_min'] = round(data['main']['temp_min'] * 9/5 -459.67, 1)
     data['main']['temp_max'] = round(data['main']['temp_max'] * 9/5 -459.67, 1)
-    data['sys']['sunrise'] = datetime.fromtimestamp(data['sys']['sunrise']).strftime("%d. %B %H:%M")
+    data['sys']['sunrise'] = datetime.fromtimestamp(data['sys']['sunrise']).strftime("%H:%M")
     data['sys']['sunset'] = datetime.fromtimestamp(data['sys']['sunset']).strftime("%H:%M")
     print('current weather run')
 
@@ -167,7 +167,7 @@ def fiveDay(city):
 
     # Convert temp unit
     for list in data['list']:
-        # list['dt'] = datetime.fromtimestamp(data['dt']).strftime(" %d. %B %H")
+        list['dt'] = datetime.fromtimestamp(list['dt']).strftime("%B %d  %H:%M")
         list['main']['temp'] = round(list['main']['temp'] * 9 / 5 - 459.67, 1)
         list['main']['feels_like'] = round(list['main']['feels_like'] * 9 / 5 - 459.67, 1)
         list['main']['temp_min'] = round(list['main']['temp_min'] * 9 / 5 - 459.67, 1)
