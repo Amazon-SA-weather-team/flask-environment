@@ -56,40 +56,35 @@
         <button id="wheatherchange-button" onclick="wheatherchange()" type="button">5-Day Forecast</button>
 </div>
 
-
-
-
 <div id="fiveDays" style= "float: center;width: 96%; padding: 20px; margin: 10px;border: 1px solid #000033;background-color: rgba(235, 103, 114, 0.219);border-radius: 2em; font:medium; display:none">
-    <div>
-        <p style = "font:italic;">Time</p>
-        <!-- <table>
-            <tr>
-                <th>Temp:</th>
-                <td>{{ currentData.main.temp }}</td>
-            </tr>
-            <tr>
-                <th>Fells Like:</th>
-                <td>{{ currentData.main.feels_like }}</td>
-            </tr>
-            <tr>
-                <th>Max Temp:</th>
-                <td>{{ currentData.main.temp_max }}</td>
-            </tr>
-            <tr>
-                <th>Min Temp:</th>
-                <td>{{ currentData.main.temp_min }}</td>
-            </tr>
-            <tr>
-                <th>Sunrise:</th>
-                <td>{{ currentData.sys.sunrise }}</td>
-            </tr>
-            <tr>
-                <th>Sunset:</th>
-                <td>{{ currentData.sys.sunset }}</td>
-            </tr>
-        </table> -->
-    </div>
-
+    <p style = "font:italic;">Five days forecase weatehr report for city: {{ currentData.name }}</p>    
+    {% for list in fiveData.list %}
+        <div>
+            <p style = "font:italic;">{{ list.dt }}</p>
+            <table>
+                <tr>
+                    <th>Weather:</th>
+                    <td>{{ list.weather[0].main }}</td>
+                </tr>
+                <tr>
+                    <th>Temp:</th>
+                    <td>{{ list.main.temp }}</td>
+                </tr>
+                <tr>
+                    <th>Fells Like:</th>
+                    <td>{{ list.main.feels_like }}</td>
+                </tr>
+                <tr>
+                    <th>Max Temp:</th>
+                    <td>{{ list.main.temp_max }}</td>
+                </tr>
+                <tr>
+                    <th>Min Temp:</th>
+                    <td>{{ list.main.temp_min }}</td>
+                </tr>
+            </table>
+        </div>
+    {% endfor %}
     <br>
     <button id="wheatherchange-button" onclick="wheatherchange_back()" type="button">Return to Current Forecast</button>
 </div>

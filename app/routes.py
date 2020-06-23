@@ -20,30 +20,7 @@ def index():
     if record['has'] is False:
         # Call API get weather Info
         record['current'] = currentWeather(current_user.city)
-        record['fiveDay'] = fiveDay(current_user.city)
-
-        # Hard code data for code and test use
-        # data = {'coord': {'lon': -77.39, 'lat': 38.97}, 
-        # 'weather': [{'id': 803, 'main': 'Clouds', 'description': 'broken clouds', 'icon': '04d'}], 
-        # 'base': 'stations', 
-        # 'main': {'temp': 299.71, 'feels_like': 299.7, 'temp_min': 298.71, 'temp_max': 300.93, 'pressure': 1019, 'humidity': 57}, 
-        # 'visibility': 16093, 
-        # 'wind': {'speed': 3.6, 'deg': 160}, 
-        # 'clouds': {'all': 75}, 
-        # 'dt': 1592505232, 
-        # 'sys': {'type': 1, 'id': 4481, 'country': 'US', 'sunrise': 1592473427, 'sunset': 1592527071}, 
-        # 'timezone': -14400, 
-        # 'id': 4763793, 
-        # 'name': 'Herndon', 
-        # 'cod': 200}
-        # data['main']['temp'] = round(data['main']['temp'] * 9/5 -459.67, 1)
-        # data['main']['feels_like'] = round(data['main']['feels_like'] * 9/5 -459.67, 1)
-        # data['main']['temp_min'] = round(data['main']['temp_min'] * 9/5 -459.67, 1)
-        # data['main']['temp_max'] = round(data['main']['temp_max'] * 9/5 -459.67, 1)
-        # data['sys']['sunrise'] = datetime.fromtimestamp(data['sys']['sunrise']).strftime("%H:%M")
-        # data['sys']['sunset'] = datetime.fromtimestamp(data['sys']['sunset']).strftime("%H:%M")
-
-        # record['current'] = data        
+        record['fiveDay'] = fiveDay(current_user.city)   
 
         # Set has record to true
         record['has'] = True
@@ -61,7 +38,6 @@ def index():
         print('Please search: ' + form.city.data)
         record['current'] = currentWeather(form.city.data)
         record['fiveDay'] = fiveDay(form.city.data)
-
 
     return render_template("index.html", title='Home Page', currentData = record['current'], fiveData = record['fiveDay'], form=form)
 
