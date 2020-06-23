@@ -1,15 +1,97 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hi, {{ current_user.username }}!</h1>
-    <p>Current weather: {{ currentData.weather[0].main }}</p>
-    <p>Temp: {{ currentData.main.temp }}</p>
-    <p>feels_like: {{ currentData.main.feels_like }}</p>
-    <p>Lowest Temp: {{ currentData.main.temp_min }}</p>
-    <p>Highest Temp: {{ currentData.main.temp_max }}</p>
-    
-    <p>Sunrise: {{ currentData.sys.sunrise }}</p>
-    <p>Sunset: {{ currentData.sys.sunset }}</p>
-    <p>City: {{ currentData.name }}</p>
+<nav style= "background: linear-gradient(90deg, #efd5ff 0%, #515ada 100%);background-color:rgba(235, 214, 29, 0.09); border-radius: 2em; margin: 2em,1em,2em,1em;" class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div style ="font-family: 'Times New Roman', Times, serif;">
+        <form action="" method="post" style="text-align: center;">
+          {{ form.hidden_tag() }}
+          <p>
+              {{ form.city.label }}<br>
+              {{ form.city(size=15) }}<br>
+              {% for error in form.city.errors %}
+              <span style="color: red;">[{{ error }}]</span>
+              {% endfor %}
+          </p>
+          <p>{{ form.submit() }}</p>
+        </form>
+    </div>
+  </nav>
+<body style="background-image:url({{ url_for('static', filename='/styles/clouds-wallpaper.jpg') }});" >
+<h1 style = "text-align: center;text-shadow: 2px 1px #E6E6FA; color: #007FFF; font-family:'Lucida Console'; font-weight:bold;">WELCOME TO YOUR WEATHER {{ current_user.username }}!</h1>
+<div id="currentWeather" style="float: center; width: 96%; padding: 20px; margin: 10px; border: 1px solid #000033; background-color: rgba(235, 103, 114, 0.219);border-radius: 2em; font:medium">
+        <p style = "font:italic;">Your current weather for {{ currentData.name }} is: {{ currentData.weather[0].main }}</p>
+        <!-- <p>Temp: {{ currentData.main.temp }}</p>
+        <p>Fells Like: {{ currentData.main.feels_like }}</p>
+        <p>Max Temp: {{ currentData.main.temp_max }}</p>
+        <p>Min Temp: {{ currentData.main.temp_min }}</p>
+        <p>Sunrise: {{ currentData.sys.sunrise }}</p>
+        <p>Sunset: {{ currentData.sys.sunset }}</p> -->
+
+    <table>
+        <tr>
+            <th>Temp:</th>
+            <td>{{ currentData.main.temp }}</td>
+        </tr>
+        <tr>
+            <th>Fells Like:</th>
+            <td>{{ currentData.main.feels_like }}</td>
+        </tr>
+        <tr>
+            <th>Max Temp:</th>
+            <td>{{ currentData.main.temp_max }}</td>
+        </tr>
+        <tr>
+            <th>Min Temp:</th>
+            <td>{{ currentData.main.temp_min }}</td>
+        </tr>
+        <tr>
+            <th>Sunrise:</th>
+            <td>{{ currentData.sys.sunrise }}</td>
+        </tr>
+        <tr>
+            <th>Sunset:</th>
+            <td>{{ currentData.sys.sunset }}</td>
+        </tr>
+    </table>
+        <button id="wheatherchange-button" onclick="wheatherchange()" type="button">5-Day Forecast</button>
+</div>
+
+
+
+
+<div id="fiveDays" style= "float: center;width: 96%; padding: 20px; margin: 10px;border: 1px solid #000033;background-color: rgba(235, 103, 114, 0.219);border-radius: 2em; font:medium; display:none">
+    <div>
+        <p style = "font:italic;">Time</p>
+        <!-- <table>
+            <tr>
+                <th>Temp:</th>
+                <td>{{ currentData.main.temp }}</td>
+            </tr>
+            <tr>
+                <th>Fells Like:</th>
+                <td>{{ currentData.main.feels_like }}</td>
+            </tr>
+            <tr>
+                <th>Max Temp:</th>
+                <td>{{ currentData.main.temp_max }}</td>
+            </tr>
+            <tr>
+                <th>Min Temp:</th>
+                <td>{{ currentData.main.temp_min }}</td>
+            </tr>
+            <tr>
+                <th>Sunrise:</th>
+                <td>{{ currentData.sys.sunrise }}</td>
+            </tr>
+            <tr>
+                <th>Sunset:</th>
+                <td>{{ currentData.sys.sunset }}</td>
+            </tr>
+        </table> -->
+    </div>
+
+    <br>
+    <button id="wheatherchange-button" onclick="wheatherchange_back()" type="button">Return to Current Forecast</button>
+</div>
 {% endblock %}
 

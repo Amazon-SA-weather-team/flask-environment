@@ -1,6 +1,5 @@
 <html>
     <head>
-        <link rel= "stylesheet" type= "text/css" href= "../static/styles/mainpage.css">
         <script src="../static/script/basic.js"></script>
         
         {% if title %}
@@ -8,9 +7,11 @@
         {% else %}
         <title>weather</title>
         {% endif %}
+        <style>.nav-item{display: inline; padding:50px; margin 0em auto}.nav-link{font-family:dense; font-weight:bold; }
+        </style>
     </head>
     <body>
-      <div>
+      <div style = "text-align:center; text-shadow: 2px 1px goldenrod; color: cornsilk; font-family: papyrus;font-style:bold;">
         Weather:
         <a href="{{ url_for('index') }}">Home</a>
         <a href="{{ url_for('profile') }}">Profile</a>

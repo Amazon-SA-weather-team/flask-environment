@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <p>New User? <a href="{{ url_for('register') }}">Click to Register!</a></p>
-    <h1>Sign In</h1>
-    <form action="" method="post" novalidate>
+<body style ="background-image:url({{ url_for('static', filename='/styles/ocean-sea-sky-sunset-beach.jpg') }}); width:100%; height:auto; margin:0 auto;">
+<div style = "border: 15px rgba(255, 248, 220, 0.678); border-style: solid; background-color:rgba(250, 114, 24, 0.678); width: 35%; justify-content:center; margin: 0em auto;">
+    <p style="text-align:center;">New User?<a href="{{ url_for('register') }}">Click to Register!</a></p>
+    <h1 style="text-align:center; text-align: center;font-style: italic;font-family: 'Times New Roman', Times, serif;">Sign In</h1>
+    <form action="" method="post" novalidate style="text-align:center;">
         {{ form.hidden_tag() }}
         <p>
             {{ form.username.label }}<br>
@@ -22,5 +24,6 @@
         <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
         <p>{{ form.submit() }}</p>
     </form>
-    
+</div>
+</body>
 {% endblock %}

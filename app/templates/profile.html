@@ -1,10 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Profile</h1>
-    <h1>Hi, {{ current_user.username }}!</h1>
-    <h2>Address: {{ current_user.address }}, {{ current_user.city }}</h2>
-    <button id="UpdateButton" onClick="UpdateClick()">Update Address</button>
+<body style ="background-image:url({{ url_for('static', filename='/styles/Newyork') }}); width:100%; height:auto; margin:0 auto;">
+<div style = "border: 15px rgba(255, 248, 220, 0.678); border-style: solid; background-color:rgba(250, 114, 24, 0.678); width: 35%; justify-content:center; margin: 0em auto;">
+    <h1 style="text-align:center; text-align: center;font-style: italic;font-family: 'Times New Roman', Times, serif;">Hi, {{ current_user.username }}!
+        <br>Here is your Profile!</h1>
+    <h2 style="text-align:center; text-align: center;font-style: italic;font-family: 'Times New Roman', Times, serif;">Address: {{ current_user.address }}, {{ current_user.city }}</h2>
+    <p style= "text-align:center;"> Update your information below!</p>
+    <button style="marign 0em auto" id="UpdateButton" onClick="UpdateClick()">Update Address</button>
     <form action="" method="post" id = "UpdateForm" style="display: none">
         {{ form.hidden_tag() }}
 
@@ -24,11 +27,6 @@
         </p>
         <p>{{ form.submit() }}</p>
     </form>
-    <!-- <script>
-        function UpdateClick() {
-            document.getElementById("UpdateForm").style.display = "block";
-            document.getElementById("UpdateButton").style.display = "none";
-
-        }
-    </script> -->
+</div>
+</body>
 {% endblock %}

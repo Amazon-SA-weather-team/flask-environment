@@ -33,3 +33,7 @@ class UpdateProfileForm(FlaskForm):
     address = StringField('Address', validators=[DataRequired()])
     city = StringField('City', validators=[DataRequired()])
     submit = SubmitField('Update')
+
+class SearchCityForm(FlaskForm):
+    city = StringField('Please input city you want search:', validators=[DataRequired()])
+    submit = SubmitField('Search')

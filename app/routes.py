@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, login_required, logout_user
 from app import app
-from app.forms import LoginForm, RegistrationForm, UpdateProfileForm
+from app.forms import LoginForm, RegistrationForm, UpdateProfileForm, SearchCityForm
 from app.models import User
 from app import db
 from werkzeug.urls import url_parse
@@ -10,39 +10,40 @@ import requests
 
 
 record = {'has':False, 'current':{}, 'fiveDay': {}}
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
+    
 
     # Check if record exist
     if record['has'] is False:
         # Call API get weather Info
-        # record['current'] = currentWeather(current_user.city)
-        # record['fiveDay'] = fiveDay(current_user.city)
+        record['current'] = currentWeather(current_user.city)
+        record['fiveDay'] = fiveDay(current_user.city)
 
         # Hard code data for code and test use
-        data = {'coord': {'lon': -77.39, 'lat': 38.97}, 
-        'weather': [{'id': 803, 'main': 'Clouds', 'description': 'broken clouds', 'icon': '04d'}], 
-        'base': 'stations', 
-        'main': {'temp': 299.71, 'feels_like': 299.7, 'temp_min': 298.71, 'temp_max': 300.93, 'pressure': 1019, 'humidity': 57}, 
-        'visibility': 16093, 
-        'wind': {'speed': 3.6, 'deg': 160}, 
-        'clouds': {'all': 75}, 
-        'dt': 1592505232, 
-        'sys': {'type': 1, 'id': 4481, 'country': 'US', 'sunrise': 1592473427, 'sunset': 1592527071}, 
-        'timezone': -14400, 
-        'id': 4763793, 
-        'name': 'Herndon', 
-        'cod': 200}
-        data['main']['temp'] = round(data['main']['temp'] * 9/5 -459.67, 1)
-        data['main']['feels_like'] = round(data['main']['feels_like'] * 9/5 -459.67, 1)
-        data['main']['temp_min'] = round(data['main']['temp_min'] * 9/5 -459.67, 1)
-        data['main']['temp_max'] = round(data['main']['temp_max'] * 9/5 -459.67, 1)
-        data['sys']['sunrise'] = datetime.fromtimestamp(data['sys']['sunrise']).strftime("%H:%M")
-        data['sys']['sunset'] = datetime.fromtimestamp(data['sys']['sunset']).strftime("%H:%M")
+        # data = {'coord': {'lon': -77.39, 'lat': 38.97}, 
+        # 'weather': [{'id': 803, 'main': 'Clouds', 'description': 'broken clouds', 'icon': '04d'}], 
+        # 'base': 'stations', 
+        # 'main': {'temp': 299.71, 'feels_like': 299.7, 'temp_min': 298.71, 'temp_max': 300.93, 'pressure': 1019, 'humidity': 57}, 
+        # 'visibility': 16093, 
+        # 'wind': {'speed': 3.6, 'deg': 160}, 
+        # 'clouds': {'all': 75}, 
+        # 'dt': 1592505232, 
+        # 'sys': {'type': 1, 'id': 4481, 'country': 'US', 'sunrise': 1592473427, 'sunset': 1592527071}, 
+        # 'timezone': -14400, 
+        # 'id': 4763793, 
+        # 'name': 'Herndon', 
+        # 'cod': 200}
+        # data['main']['temp'] = round(data['main']['temp'] * 9/5 -459.67, 1)
+        # data['main']['feels_like'] = round(data['main']['feels_like'] * 9/5 -459.67, 1)
+        # data['main']['temp_min'] = round(data['main']['temp_min'] * 9/5 -459.67, 1)
+        # data['main']['temp_max'] = round(data['main']['temp_max'] * 9/5 -459.67, 1)
+        # data['sys']['sunrise'] = datetime.fromtimestamp(data['sys']['sunrise']).strftime("%H:%M")
+        # data['sys']['sunset'] = datetime.fromtimestamp(data['sys']['sunset']).strftime("%H:%M")
 
-        record['current'] = data        
+        # record['current'] = data        
 
         # Set has record to true
         record['has'] = True
@@ -51,9 +52,18 @@ def index():
             print('I already exist')
         else:
             record['current'] = currentWeather(current_user.city)
+            record['fiveDay'] = fiveDay(current_user.city)
             print('city changed')
 
-    return render_template("index.html", title='Home Page', currentData = record['current'], fiveData = record['fiveDay'])
+    # Search weather data by city
+    form = SearchCityForm()
+    if form.validate_on_submit():
+        print('Please search: ' + form.city.data)
+        record['current'] = currentWeather(form.city.data)
+        record['fiveDay'] = fiveDay(form.city.data)
+
+
+    return render_template("index.html", title='Home Page', currentData = record['current'], fiveData = record['fiveDay'], form=form)
 
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
@@ -134,7 +144,7 @@ def currentWeather(city):
     data['main']['feels_like'] = round(data['main']['feels_like'] * 9/5 -459.67, 1)
     data['main']['temp_min'] = round(data['main']['temp_min'] * 9/5 -459.67, 1)
     data['main']['temp_max'] = round(data['main']['temp_max'] * 9/5 -459.67, 1)
-    data['sys']['sunrise'] = datetime.fromtimestamp(data['sys']['sunrise']).strftime("%H:%M")
+    data['sys']['sunrise'] = datetime.fromtimestamp(data['sys']['sunrise']).strftime("%d. %B %H:%M")
     data['sys']['sunset'] = datetime.fromtimestamp(data['sys']['sunset']).strftime("%H:%M")
     print('current weather run')
 
@@ -157,6 +167,7 @@ def fiveDay(city):
 
     # Convert temp unit
     for list in data['list']:
+        # list['dt'] = datetime.fromtimestamp(data['dt']).strftime(" %d. %B %H")
         list['main']['temp'] = round(list['main']['temp'] * 9 / 5 - 459.67, 1)
         list['main']['feels_like'] = round(list['main']['feels_like'] * 9 / 5 - 459.67, 1)
         list['main']['temp_min'] = round(list['main']['temp_min'] * 9 / 5 - 459.67, 1)
