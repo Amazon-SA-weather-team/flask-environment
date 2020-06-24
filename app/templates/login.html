@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<body style ="background-image:url({{ url_for('static', filename='/styles/ocean-sea-sky-sunset-beach.jpg') }}); width:100%; height:auto; margin:0 auto;">
+<body style ="background-image:url({{ url_for('static', filename='/styles/ocean-sea-sky-sunset-beach.jpg') }}); background-size:cover;background-repeat:no-repeat; height:100%;background-position: center center;">
 <div style = "border: 15px rgba(255, 248, 220, 0.678); border-style: solid; background-color:rgba(250, 114, 24, 0.678); width: 35%; justify-content:center; margin: 0em auto;">
     <p style="text-align:center;">New User?<a href="{{ url_for('register') }}">Click to Register!</a></p>
     <h1 style="text-align:center; text-align: center;font-style: italic;font-family: 'Times New Roman', Times, serif;">Sign In</h1>

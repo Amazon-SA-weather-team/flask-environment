@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<nav style= "background: linear-gradient(90deg, #efd5ff 0%, #515ada 100%);background-color:rgba(235, 214, 29, 0.09); border-radius: 2em; margin: 2em,1em,2em,1em;" class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div style ="font-family: 'Times New Roman', Times, serif;">
-        <form action="" method="post" style="text-align: center;">
+<nav style= "background:linear-gradient(90deg, #efd5ff 0%, #515ada 100%);background-color:rgba(235, 214, 29, 0.09); border-radius: 2em; margin: 2em,2em,2em,2em;" class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div style ="font-family: 'Courier New'; text-align:center;">
+        <form action="" method="post">
           {{ form.hidden_tag() }}
           <p>
               {{ form.city.label }}<br>
@@ -16,77 +16,79 @@
         </form>
     </div>
   </nav>
-<body style="background-image:url({{ url_for('static', filename='/styles/clouds-wallpaper.jpg') }});" >
-<h1 style = "text-align: center;text-shadow: 2px 1px #E6E6FA; color: #007FFF; font-family:'Lucida Console'; font-weight:bold;">WELCOME TO YOUR WEATHER {{ current_user.username }}!</h1>
-<div id="currentWeather" style="float: center; width: 96%; padding: 20px; margin: 10px; border: 1px solid #000033; background-color: rgba(235, 103, 114, 0.219);border-radius: 2em; font:medium">
-        <p style = "font:italic;">Your current weather for {{ currentData.name }} is: {{ currentData.weather[0].main }}</p>
+<body style="background-image:url({{ url_for('static', filename='/styles/clouds-wallpaper.jpg') }});background-size:cover;background-repeat:no-repeat; height:100%; background-position: center center;" >
+<h1 style = "margin: 0em auto; padding:20px; text-align: center;text-shadow: 2px 1px #E6E6FA; color: #007FFF; font-family:'Courier New'; font-weight:bold;">WELCOME TO YOUR WEATHER {{ current_user.username }}!</h1>
+<div id="currentWeather" style="width: 25%; height: 200px; padding: 20px; margin: 0em auto; border: 1px solid #000033; background-color: rgba(235, 103, 114, 0.219);border-radius: 2em; font:medium">
+    <p style = "font:italic; text-align:center; font-family:'Courier New';">Your current weather for {{ currentData.name }} is: {{ currentData.weather[0].main }}<br>
+                <button id="wheatherchange-button" onclick="wheatherchange()" type="button">5-Day Forecast</button>
+</p>
         <!-- <p>Temp: {{ currentData.main.temp }}</p>
-        <p>Fells Like: {{ currentData.main.feels_like }}</p>
+        <p>Feels Like: {{ currentData.main.feels_like }}</p>
         <p>Max Temp: {{ currentData.main.temp_max }}</p>
         <p>Min Temp: {{ currentData.main.temp_min }}</p>
         <p>Sunrise: {{ currentData.sys.sunrise }}</p>
         <p>Sunset: {{ currentData.sys.sunset }}</p> -->
 
-    <table>
+    <table style="display:block;margin-left: 3px; text-align:center;">
         <tr>
-            <th>Temp:</th>
+            <th style="text-align:left;">Temp:</th>
             <td>{{ currentData.main.temp }}</td>
         </tr>
         <tr>
-            <th>Fells Like:</th>
+            <th style="text-align:left;">Feels Like:</th>
             <td>{{ currentData.main.feels_like }}</td>
         </tr>
         <tr>
-            <th>Max Temp:</th>
+            <th style="text-align:left;">Max Temp:</th>
             <td>{{ currentData.main.temp_max }}</td>
         </tr>
         <tr>
-            <th>Min Temp:</th>
+            <th style="text-align:left;">Min Temp:</th>
             <td>{{ currentData.main.temp_min }}</td>
         </tr>
         <tr>
-            <th>Sunrise:</th>
+            <th style="text-align:left;">Sunrise:</th>
             <td>{{ currentData.sys.sunrise }}</td>
         </tr>
         <tr>
-            <th>Sunset:</th>
+            <th style="text-align:left;">Sunset:</th>
             <td>{{ currentData.sys.sunset }}</td>
         </tr>
     </table>
-        <button id="wheatherchange-button" onclick="wheatherchange()" type="button">5-Day Forecast</button>
 </div>
 
-<div id="fiveDays" style= "float: center;width: 96%; padding: 20px; margin: 10px;border: 1px solid #000033;background-color: rgba(235, 103, 114, 0.219);border-radius: 2em; font:medium; display:none">
-    <p style = "font:italic;">Five days forecase weatehr report for city: {{ currentData.name }}</p>    
+<div id="fiveDays" style= "width: auto; margin: 0em auto;border: 1px solid #000033;background-color: rgba(235, 103, 114, 0.219);border-radius: 2em; font:medium; display:none;">
+    <p style = "font:italic; text-align:center; font-family:'Courier New';">Five days forecast weather report for city: {{ currentData.name }}<br>
+            <button style="" id="wheatherchange-button" onclick="wheatherchange_back()" type="button">Return to Current Forecast</button>
+</p>
     {% for list in fiveData.list %}
-        <div>
-            <p style = "font:italic;">{{ list.dt }}</p>
-            <table>
+        <div style="text-align:left; display:inline-table;justify-content: space-between; padding: 20px 10px 20px 10px;">
+            <p style= "font-style:italic; text-align:center;font-family:Courier New;">{{ list.dt }}</p>
+            <table style="text-align:left;border: 1px solid black; font-family:'Courier New';">
                 <tr>
-                    <th>Weather:</th>
+                    <th style="text-align:left;">Weather:</th>
                     <td>{{ list.weather[0].main }}</td>
                 </tr>
                 <tr>
-                    <th>Temp:</th>
+                    <th style="text-align:left;">Temp:</th>
                     <td>{{ list.main.temp }}</td>
                 </tr>
                 <tr>
-                    <th>Fells Like:</th>
+                    <th style="text-align:left;">Feels Like:</th>
                     <td>{{ list.main.feels_like }}</td>
                 </tr>
                 <tr>
-                    <th>Max Temp:</th>
+                    <th style="text-align:left;">Max Temp:</th>
                     <td>{{ list.main.temp_max }}</td>
                 </tr>
                 <tr>
-                    <th>Min Temp:</th>
+                    <th style="text-align:left;">Min Temp:</th>
                     <td>{{ list.main.temp_min }}</td>
                 </tr>
             </table>
         </div>
     {% endfor %}
     <br>
-    <button id="wheatherchange-button" onclick="wheatherchange_back()" type="button">Return to Current Forecast</button>
 </div>
 {% endblock %}
 
