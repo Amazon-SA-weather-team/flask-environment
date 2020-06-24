@@ -16,9 +16,9 @@
         </form>
     </div>
   </nav>
-<body style="background-image:url({{ url_for('static', filename='/styles/clouds-wallpaper.jpg') }});background-size:cover;background-repeat:no-repeat; height:100%; background-position: center center;" >
+<body style="background-image:url({{ url_for('static', filename='/styles/clouds-wallpaper.jpg') }});background-size:cover;background-repeat:no-repeat; background-position: center center;" >
 <h1 style = "margin: 0em auto; padding:20px; text-align: center;text-shadow: 2px 1px #E6E6FA; color: #007FFF; font-family:'Courier New'; font-weight:bold;">WELCOME TO YOUR WEATHER {{ current_user.username }}!</h1>
-<div id="currentWeather" style="width: 25%; height: 200px; padding: 20px; margin: 0em auto; border: 1px solid #000033; background-color: rgba(235, 103, 114, 0.219);border-radius: 2em; font:medium">
+<div id="currentWeather" style="width: 25%; padding: 20px; margin: 0em auto; border: 1px solid #000033; background-color: rgba(235, 103, 114, 0.219);border-radius: 2em; font:medium">
     <p style = "font:italic; text-align:center; font-family:'Courier New';">Your current weather for {{ currentData.name }} is: {{ currentData.weather[0].main }}<br>
                 <button id="wheatherchange-button" onclick="wheatherchange()" type="button">5-Day Forecast</button>
 </p>
